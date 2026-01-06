@@ -26,6 +26,8 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, aiClient *external.GeminiClient) {
 	docHandler := handler.NewDocumentHandler(docService)
 	srsHandler := handler.NewSRSHandler(srsService)
 
+	app.Static("/uploads", "./uploads")
+
 	// API routes
 	api := app.Group("/api/v1")
 

@@ -23,19 +23,20 @@ func NewDocumentService(
 	}
 }
 
-func (s *DocumentService) UploadDocument(name string, docType domain.DocumentType, fileData []byte) (*domain.Document, error) {
-	// Save file
-	filePath, err := s.storageService.SaveFile(name, fileData)
+func (s *DocumentService) UploadDocument(filename string, docType domain.DocumentType, data []byte) (*domain.Document, error) {
+	// Save file first
+	filePath, err := s.storageService.SaveFile(filename, data)
 	if err != nil {
 		return nil, err
 	}
 
 	// Create document record
 	doc := &domain.Document{
-		Name:     name,
-		Type:     docType,
+		Filename: filename,
 		FilePath: filePath,
+		Type:     domain.DocumentTypeBRD,
 		Status:   domain.StatusUploaded,
+		// Content will be filled later during processing
 	}
 
 	if err := s.repo.Create(doc); err != nil {
@@ -58,14 +59,14 @@ func (s *DocumentService) ProcessDocument(id uint) error {
 	}
 
 	// Extract content using AI
-	content, err := s.aiService.ExtractContent(doc.FilePath, string(doc.Type))
+	extractedContent, err := s.aiService.ExtractContent(doc.FilePath, string(doc.Type))
 	if err != nil {
 		doc.Status = domain.StatusFailed
 		s.repo.Update(doc)
 		return err
 	}
 
-	doc.Content = content
+	doc.Content = extractedContent
 	doc.Status = domain.StatusCompleted
 	return s.repo.Update(doc)
 }

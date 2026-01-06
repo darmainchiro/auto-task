@@ -28,7 +28,7 @@ func (h *DocumentHandler) Upload(c *fiber.Ctx) error {
 		docType = string(domain.DocumentTypeBRD)
 	}
 
-	// Read file content
+	// // Read file content
 	fileContent, err := file.Open()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
