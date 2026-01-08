@@ -32,7 +32,19 @@ func main() {
 	}
 
 	// Initialize external services
-	aiClient := external.NewGeminiClient(os.Getenv("GEMINI_API_KEY"))
+	//Groq
+	apiKey := os.Getenv("GROQ_API_KEY")
+	if apiKey == "" {
+		log.Fatal("GROQ_API_KEY is required in .env")
+	}
+
+	aiClient := external.NewGroqClient(apiKey)
+
+	//Gemini
+	// aiClient, err := external.NewGeminiClient(os.Getenv("GEMINI_API_KEY"), "google-credentials.json")
+	// if err != nil {
+	// 	log.Fatalf("Gagal inisialisasi Gemini/Google Client: %v", err)
+	// }
 
 	// Initialize Fiber app
 	app := fiber.New(fiber.Config{

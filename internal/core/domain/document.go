@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"encoding/json"
 	"time"
 )
 
@@ -26,13 +25,13 @@ const (
 
 // Document represents a document entity
 type Document struct {
-	ID            uint            `json:"id" gorm:"primaryKey"`
-	Filename      string          `json:"filename" gorm:"not null"`
-	Type          DocumentType    `json:"type" gorm:"not null"`
-	FilePath      string          `json:"file_path" gorm:"not null"`
-	Status        DocumentStatus  `json:"status" gorm:"default:'UPLOADED'"`
-	Content       string          `json:"content" gorm:"type:text"`
-	ExtractedData json.RawMessage `gorm:"type:jsonb;nullable" json:"extracted_data"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
+	ID            uint           `json:"id" gorm:"primaryKey"`
+	Filename      string         `json:"filename" gorm:"not null"`
+	Type          DocumentType   `json:"type" gorm:"not null"`
+	FilePath      string         `json:"file_path" gorm:"not null"`
+	Status        DocumentStatus `json:"status" gorm:"default:'UPLOADED'"`
+	ExtractedData []byte         `json:"extracted_data"`
+	GoogleDocLink string         `json:"google_doc_link"`
+	CreatedAt     time.Time      `json:"created_at"`
+	UpdatedAt     time.Time      `json:"updated_at"`
 }

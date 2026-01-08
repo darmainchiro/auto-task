@@ -2,6 +2,7 @@ package router
 
 import (
 	"srs-automation/internal/api/handler"
+	"srs-automation/internal/core/ports"
 	"srs-automation/internal/core/service"
 	"srs-automation/internal/infra/external"
 	"srs-automation/internal/infra/repository"
@@ -10,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func SetupRoutes(app *fiber.App, db *gorm.DB, aiClient *external.GeminiClient) {
+func SetupRoutes(app *fiber.App, db *gorm.DB, aiClient ports.AIService) {
 	// Initialize repositories
 	docRepo := repository.NewDocumentRepository(db)
 	srsRepo := repository.NewSRSRepository(db)
@@ -38,6 +39,8 @@ func SetupRoutes(app *fiber.App, db *gorm.DB, aiClient *external.GeminiClient) {
 	documents.Get("/:id", docHandler.GetByID)
 	documents.Post("/:id/process", docHandler.Process)
 	documents.Delete("/:id", docHandler.Delete)
+
+	documents.Get("/:id/download", docHandler.DownloadResult)
 
 	// SRS routes
 	srs := api.Group("/srs")

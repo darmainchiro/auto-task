@@ -37,7 +37,7 @@ func (s *SRSService) GenerateSRS(documentID uint, title string) (*domain.SRS, er
 	}
 
 	// Generate SRS using AI
-	srsContent, err := s.aiService.GenerateSRS(doc.Content)
+	srsContent, err := s.aiService.GenerateSRS("")
 	if err != nil {
 		return nil, err
 	}
